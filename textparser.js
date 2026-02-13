@@ -8,21 +8,26 @@ class MyValidator{
         }
     }
 
-    processOpenTag(tagName, stack){
-        console.log(tagName);
+    processOpenTag(tagName, stack, endTag){
+        // console.log(tagName);
+        if(stack.includes("p") && (tagName === "p" || tagName === "div")){
+            console.log("p tag can't contain p or div element");
+            return "Invalid";
+        }
+
         stack.push(tagName);
     }
 
     processCloseTag(tagName, stack){
-        console.log(tagName);
+        // console.log(tagName);
         if(stack.length == 0){
             console.log("Closing tag without opening found");
-            return;
+            return "Invalid";
         }
         else{
             if(stack[stack.length - 1] != tagName){
                 console.log("Wrong nesting, mismatch of opening and closing tag");
-                return;
+                return "Invalid";
             }
             else{
                 stack.pop();
@@ -53,7 +58,8 @@ class MyValidator{
                     }
                     else if(currentChar == '>'){
                         currentState = this.states.DATA_STATE;
-                        this.processOpenTag(currentTagName, stack);
+                        if(this.processOpenTag(currentTagName, stack, false) == "Invalid")
+                        return;
                         currentTagName = "";
                     }
                     else{
@@ -69,7 +75,8 @@ class MyValidator{
                 case this.states.ENG_TAG_START_STATE :
                     if(currentChar == '>')
                     {
-                        this.processCloseTag(currentTagName, stack);
+                        if(this.processCloseTag(currentTagName, stack, true) == "Invalid")
+                        return;
                         currentTagName = "";
                         currentState = this.states.DATA_STATE;
                     }
@@ -102,4 +109,4 @@ obj.processText("<div>");
 
 obj.processText("<div>this is a div</div>");
 
-obj.processText("<p>this is <span> span</span> </p>")
+obj.processText("<p>this is <span><div></div></span> </p>")
