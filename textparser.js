@@ -8,6 +8,8 @@ class MyValidator{
         }
     }
 
+
+
     processOpenTag(tagName, stack, endTag){
         // console.log(tagName);
         if(stack.includes("p") && (tagName === "p" || tagName === "div")){
@@ -63,6 +65,10 @@ class MyValidator{
                         currentTagName = "";
                     }
                     else{
+                        if(currentTagName == "" && currentChar == ' '){
+                            console.log("Unexpected space in starting of tag");
+                            return;
+                        }
                         if(currentChar >= 'a' && currentChar <= 'z')
                         currentTagName= currentTagName + currentChar;
                         else{
@@ -81,6 +87,10 @@ class MyValidator{
                         currentState = this.states.DATA_STATE;
                     }
                     else{
+                        if(currentTagName == "" && currentChar == ' '){
+                            console.log("Unexpected space in ending of tag");
+                            return;
+                        }
                         if(currentChar >= 'a' && currentChar <= 'z')
                         currentTagName+=currentChar;
                         else{
@@ -110,3 +120,5 @@ obj.processText("<div>");
 obj.processText("<div>this is a div</div>");
 
 obj.processText("<p>this is <span><div></div></span> </p>")
+
+obj.processText("<div>this is a div< /div>")
