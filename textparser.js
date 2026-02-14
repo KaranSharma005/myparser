@@ -66,7 +66,7 @@ class MyValidator{
                     }
                     else{
                         if(currentTagName == "" && currentChar == ' '){
-                            console.log("Unexpected space in starting of tag");
+                            console.log("Unexpected space in tag name");
                             return;
                         }
                         if(currentChar >= 'a' && currentChar <= 'z')
@@ -88,11 +88,17 @@ class MyValidator{
                     }
                     else{
                         if(currentTagName == "" && currentChar == ' '){
-                            console.log("Unexpected space in ending of tag");
+                            console.log("Unexpected space in tag name");
                             return;
                         }
                         if(currentChar >= 'a' && currentChar <= 'z')
                         currentTagName+=currentChar;
+                        else if(currentChar == ' '){
+                            while(rawText[i] != '>'){           //this will ignore all the character after tag name in case of ending tag
+                                i+=1;
+                            }
+                            i-=1;
+                        }
                         else{
                             console.log("Wrong tag name found");
                             return;
@@ -121,4 +127,8 @@ obj.processText("<div>this is a div</div>");
 
 obj.processText("<p>this is <span><div></div></span> </p>")
 
-obj.processText("<div>this is a div< /div>")
+obj.processText("<div>this is a div</div>")
+
+obj.processText("<div></div tfberkf ;rlfjor>")
+
+// obj.processText("<p class='para'>This is a paragraph</p >")
