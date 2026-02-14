@@ -45,6 +45,7 @@ class MyValidator{
         let i = 0;
         let currentTagName = "";
         let stack = [];
+        let currentAttributes = [];
         let currentArrributeName = "";
         let currentAttributeValue = "";
 
@@ -64,6 +65,7 @@ class MyValidator{
                     }
                     else if(currentChar == '>'){
                         currentState = this.states.DATA_STATE;
+                        currentAttributes = [];
                         if(this.processOpenTag(currentTagName, stack, false) == "Invalid")
                         return;
                         currentTagName = "";
@@ -119,6 +121,7 @@ class MyValidator{
                     {
                     }
                     else if (currentChar == '>'){
+                        currentAttributes = [];
                         if(this.processOpenTag(currentTagName, stack, false) == "Invalid")
                         return;
                         currentTagName = "";
@@ -144,6 +147,12 @@ class MyValidator{
                     }
                     else if(currentChar == '=')
                     {
+                        if(currentAttributes.includes(currentArrributeName)){
+                            console.log("Duplicate attributes are not allowed");
+                            return;
+                        }
+                        currentAttributes.push(currentArrributeName);
+                        currentArrributeName = "";
                         currentState = this.states.BEFORE_ATTRIBUTE_VALUE_STATE;
                     }
                     else if(currentChar == ' ')
@@ -151,6 +160,7 @@ class MyValidator{
                         
                     }
                     else if(currentChar == '>'){
+                        currentAttributes = [];
                         if(this.processOpenTag(currentTagName, stack, false) == "Invalid")
                         return;
                         currentTagName = "";
@@ -181,6 +191,7 @@ class MyValidator{
                             currentAttributeValue += rawText[i];
                             i++;
                         }
+                        currentAttributeValue = "";
 
                         if(rawText[i] != quote)
                         {
@@ -232,3 +243,8 @@ obj.processText("<p class = 'para>This is a paragraph</ p>")
 obj.processText("<p class == 'para>This is a paragraph</ p>")
 
 obj.processText("<p class='hdhjs' id = 'name'>This is a paragraph</p >")
+
+obj.processText("<p class='hdhjs' class = 'name'>This is a paragraph</p >")
+
+
+
