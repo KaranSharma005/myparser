@@ -102,11 +102,17 @@ class MyValidator{
                         }
                         if(currentChar >= 'a' && currentChar <= 'z')
                         currentTagName+=currentChar;
-                        else if(currentChar == ' '){
-                            while(rawText[i] != '>'){           //this will ignore all the character after tag name in case of ending tag
-                                i+=1;
+                        else if(currentChar == ' ')
+                        {
+                            while(i < rawText.length && rawText[i] == ' ') {
+                                i++;
                             }
-                            i-=1;
+
+                            if(rawText[i] != '>') {
+                                console.log("End tag cannot contain attributes");
+                                return;
+                            }
+                            i--;
                         }
                         else{
                             console.log("Wrong tag name found");
@@ -245,6 +251,3 @@ obj.processText("<p class == 'para>This is a paragraph</ p>")
 obj.processText("<p class='hdhjs' id = 'name'>This is a paragraph</p >")
 
 obj.processText("<p class='hdhjs' class = 'name'>This is a paragraph</p >")
-
-
-
