@@ -15,8 +15,13 @@ class MyValidator{
 
     processOpenTag(tagName, stack, endTag){
         // console.log(tagName);
-        if(stack.includes("p") && (tagName === "p" || tagName === "div")){
+        if(stack.includes("p") && (tagName == "p" || tagName == "div")){
             console.log("p tag can't contain p or div element");
+            return "Invalid";
+        }
+
+        if(stack.includes("span") && (tagName == "p" || tagName == "div")){
+            console.log("span can't contains div or p as its descendent");
             return "Invalid";
         }
 
@@ -104,11 +109,13 @@ class MyValidator{
                         currentTagName+=currentChar;
                         else if(currentChar == ' ')
                         {
-                            while(i < rawText.length && rawText[i] == ' ') {
+                            while(i < rawText.length && rawText[i] == ' ')
+                            {
                                 i++;
                             }
 
-                            if(rawText[i] != '>') {
+                            if(rawText[i] != '>')
+                            {
                                 console.log("End tag cannot contain attributes");
                                 return;
                             }
@@ -232,22 +239,24 @@ obj.processText("<div>");
 
 obj.processText("<div>this is a div</div>");
 
-obj.processText("<p>this is <span><div></div></span> </p>")
+obj.processText("<p>this is <span><div></div></span> </p>");
 
-obj.processText("<div>this is a div</div>")
+obj.processText("<div>this is a div</div>");
 
-obj.processText("<div></div tfberkf ;rlfjor>")
+obj.processText("<div></div tfberkf ;rlfjor>");
 
-obj.processText("< p>This is a paragraph</p>")
+obj.processText("< p>This is a paragraph</p>");
 
-obj.processText("<p>This is a paragraph</ p>")
+obj.processText("<p>This is a paragraph</ p>");
 
-obj.processText("<p class = '>This is a paragraph</ p>")
+obj.processText("<p class = '>This is a paragraph</ p>");
 
-obj.processText("<p class = 'para>This is a paragraph</ p>")
+obj.processText("<p class = 'para>This is a paragraph</ p>");
 
-obj.processText("<p class == 'para>This is a paragraph</ p>")
+obj.processText("<p class == 'para>This is a paragraph</ p>");
 
-obj.processText("<p class='hdhjs' id = 'name'>This is a paragraph</p >")
+obj.processText("<p class='hdhjs' id = 'name'>This is a paragraph</p >");
 
-obj.processText("<p class='hdhjs' class = 'name'>This is a paragraph</p >")
+obj.processText("<p class='hdhjs' class = 'name'>This is a paragraph</p >");
+
+obj.processText("<span><p><div></div></p></span>");
